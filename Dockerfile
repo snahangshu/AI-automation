@@ -8,7 +8,7 @@ ENV PYTHONPATH=.
 
 # Install system dependencies for Playwright/Chromium
 # These are the essential libraries Render (and other Linux systems) need to run headless Chrome
-RUN apt-get update && apt-get install -y --no-install-reconciles \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     gnupg \
     libnss3 \
