@@ -6,7 +6,7 @@ from core.database.manager import DatabaseManager
 from core.ingestion import KnowledgeIngestor
 import uvicorn
 import asyncio
-from workflow import scrape_task, capture_lead_task # Import workflow tasks
+# from workflow import scrape_task, capture_lead_task # Removed
 
 app = FastAPI(title="Fastigo AI Chatbot API")
 
@@ -40,10 +40,10 @@ async def chat(request: ChatRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/scrape")
-async def trigger_scrape(request: ScrapeRequest):
-    # Trigger distributed workflow task
-    scrape_task.trigger(url=request.url, max_pages=request.max_pages)
-    return {"message": f"Scraping workflow started for {request.url}. Track it on your Render dashboard."}
+async def trigger_scrape(request: ScrapeRequest, background_tasks: BackgroundTasks):
+    # Trigger background ingestion locally
+    background_tasks.add_task(ingestor.scrape_and_ingest, request.url, request.max_pages)
+    return {"message": f"Scraping started for {request.url}. This will run in the background."}
 
 if __name__ == "__main__":
     import os

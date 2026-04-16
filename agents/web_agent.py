@@ -39,11 +39,10 @@ class WebChatbotAgent(BaseAgent):
         self.register_tool(lead_tool, self.handle_lead_capture)
 
     def handle_lead_capture(self, name: str, service: str, details: str, session_id: str):
-        # Trigger distributed workflow task
-        from workflow import capture_lead_task
-        capture_lead_task.trigger(name=name, service=service, details=details, session_id=session_id)
-        
-        return f"Thank you {name}, I've initiated the record for your interest in {service}. Our team will review your requirements: {details}."
+        success = self.sheets.capture_lead(name, service, details, session_id)
+        if success:
+            return f"Thank you {name}, I've recorded your interest in {service} with the following details: {details}. Our team will get back to you soon!"
+        return "I'm sorry, I couldn't record those details right now. Could you please try again later?"
 
     def get_system_prompt(self) -> str:
         return (

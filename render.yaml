@@ -1,23 +1,12 @@
 services:
-  # 1. API Web Service
   - type: web
-    name: fastigo-agent-api
+    name: fastigo-agent-monolith
     env: docker
-    plan: starter # Recommended for RAM (SentenceTransformers + Playwright)
-    region: singapore # Change as desired
+    plan: starter # Important: Use Starter (2GB) for scraping + AI models
+    region: singapore
     envVars:
       - key: PORT
         value: 8000
-      - fromGroup: fastigo-secrets
-
-  # 2. Render Workflows Task Server (Worker)
-  - type: worker
-    name: fastigo-workflow-server
-    env: docker
-    dockerCommand: python workflow.py
-    plan: starter
-    region: singapore
-    envVars:
       - fromGroup: fastigo-secrets
 
 envVarGroups:

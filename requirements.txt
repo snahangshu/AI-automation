@@ -15,5 +15,4 @@ pymongo
 supabase
 pydantic
 python-dotenv
-render-sdk
 playwright
